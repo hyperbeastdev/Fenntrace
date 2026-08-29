@@ -6,7 +6,7 @@ Fenntrace is a privacy-first personal data exposure checker. It helps people und
 
 ## Live Demo
 
-🔗 **Live application:** [ADD VERCEL URL HERE]
+🔗 **Live application:** https://fenntrace.vercel.app
 
 🎥 **Demo video:** [ADD DEMO VIDEO URL HERE]
 
