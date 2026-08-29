@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="150 100 1350 400" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Fenntrace</title>
+
+  <g stroke="#fff" stroke-linecap="square" stroke-linejoin="miter" stroke-width="15">
+    <path d="M234 287V125H466V192H292V287H397V355H334" />
+    <path d="M234 192H176V485H292V400" />
+    <path d="M234 418V354H249" />
+    <rect height="25" width="24" x="280" y="344" />
+  </g>
+
+  <text
+    x="545"
+    y="355"
+    fill="#fff"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="180"
+    font-weight="400"
+  >Fenntrace</text>
+</svg>

@@ -1,17 +1,27 @@
-import { Geist, Geist_Mono, Inter, Roboto_Slab } from "next/font/google"
+import type { Metadata } from "next"
+import { Inter, JetBrains_Mono } from "next/font/google"
 
 import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
-const robotoSlabHeading = Roboto_Slab({subsets:['latin'],variable:'--font-heading'});
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+})
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'})
-
-const fontMono = Geist_Mono({
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
+  display: "swap",
+  weight: ["400"],
 })
+
+export const metadata: Metadata = {
+  title: "Fenntrace — Personal Data Exposure Checker",
+  description:
+    "Understand your exposure without turning your email into a profile. Check if your email appears in known data breaches.",
+}
 
 export default function RootLayout({
   children,
@@ -21,12 +31,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, "font-sans", inter.variable, robotoSlabHeading.variable)}
+      className={cn("dark antialiased", inter.variable, jetbrainsMono.variable)}
     >
-      <body>
-        <ThemeProvider>{children}</ThemeProvider>
-      </body>
+      <body>{children}</body>
     </html>
   )
 }
