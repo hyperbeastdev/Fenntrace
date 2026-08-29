@@ -125,7 +125,7 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result. (If port 3000 is in use, Next.js will automatically select an alternative port such as 3001).
+Open [http://localhost:3000](http://localhost:3001) with your browser to see the result. (If port 3000 is in use, Next.js will automatically select an alternative port such as 3001).
 
 ## Environment variables
 
