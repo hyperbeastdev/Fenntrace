@@ -1,28 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
-  <defs>
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#161819" />
-      <stop offset="100%" stop-color="#0C0D0F" />
-    </linearGradient>
-    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#79C0FF" />
-      <stop offset="100%" stop-color="#58A6FF" />
-    </linearGradient>
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="0" stdDeviation="12" flood-color="#58A6FF" flood-opacity="0.35" />
-    </filter>
-  </defs>
+  <!-- Solid Dark Background Container matching Fenntrace theme -->
+  <rect width="512" height="512" rx="112" fill="#0C0D0F" stroke="#33383F" stroke-width="8" />
 
-  <!-- Background container -->
-  <rect width="512" height="512" rx="128" fill="url(#bgGrad)" stroke="#58A6FF" stroke-width="8" stroke-opacity="0.25" />
-
-  <!-- Fenntrace Maze F Mark -->
-  <g transform="translate(256, 256) scale(1.05) translate(-321, -305)" filter="url(#glow)">
-    <g stroke="url(#brandGrad)" stroke-linecap="square" stroke-linejoin="miter" stroke-width="22">
+  <!-- Fenntrace Maze F Mark in Crisp White #FFFFFF -->
+  <g transform="translate(256, 256) scale(1.08) translate(-321, -305)">
+    <g stroke="#FFFFFF" stroke-linecap="square" stroke-linejoin="miter" stroke-width="20">
       <path d="M234 287V125H466V192H292V287H397V355H334" />
       <path d="M234 192H176V485H292V400" />
       <path d="M234 418V354H249" />
-      <rect height="28" width="28" x="278" y="342" fill="url(#brandGrad)" stroke="none" />
+      <rect height="26" width="26" x="279" y="343" fill="#FFFFFF" stroke="none" />
     </g>
   </g>
 </svg>
