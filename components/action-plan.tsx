@@ -24,6 +24,7 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { ConfettiBurst } from "@/components/confetti-burst"
 import type { ActionItem, ExposureResult } from "@/domain/types"
 
 interface ActionPlanProps {
@@ -165,11 +166,12 @@ export function ActionPlan({ actions, result, className }: ActionPlanProps) {
         </div>
       </div>
 
-      {/* All completed celebratory banner */}
+      {/* All completed celebratory banner with particle burst */}
       {isAllCompleted && (
-        <div className="flex items-center gap-3 rounded-xl border border-ft-success/40 bg-ft-success-muted/30 p-4 text-xs text-foreground animate-in fade-in duration-300">
+        <div className="relative overflow-hidden flex items-center gap-3 rounded-xl border border-ft-success/40 bg-ft-success-muted/30 p-4 text-xs text-foreground animate-in fade-in duration-300">
+          <ConfettiBurst trigger={isAllCompleted} />
           <Sparkles className="h-5 w-5 text-ft-success shrink-0" />
-          <div className="flex flex-col gap-0.5">
+          <div className="flex flex-col gap-0.5 relative z-10">
             <span className="font-semibold text-ft-success">All recommended actions completed!</span>
             <span className="text-muted-foreground">
               You have mitigated the highest risk vulnerabilities associated with this exposure.

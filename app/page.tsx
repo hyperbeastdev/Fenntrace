@@ -26,6 +26,8 @@ import { PrivacyPromise } from "@/components/privacy-promise"
 import { InvestigationSnapshot } from "@/components/investigation-snapshot"
 import { CapabilityGrid } from "@/components/capability-grid"
 import { ScanSequence } from "@/components/scan-sequence"
+import { BreachMarquee } from "@/components/ui/breach-marquee"
+import { DecryptText } from "@/components/ui/decrypt-text"
 import {
   FoundView,
   NotFoundView,
@@ -118,11 +120,11 @@ export default function FenntracePage() {
     return (
       <>
         {/* ============================================================
-            HERO — Two-column desktop, stacked mobile
+            HERO — Two-column desktop, stacked mobile + Cyber Grid
             ============================================================ */}
-        <section className="relative overflow-hidden">
-          {/* Subtle ambient glow */}
-          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
+        <section className="relative overflow-hidden bg-cyber-grid border-b border-border/30">
+          {/* Subtle ambient glowing orb */}
+          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-primary/10 rounded-full blur-[140px] pointer-events-none animate-pulse duration-1000" />
 
           <div className="relative z-10 mx-auto w-full max-w-[var(--content-max-width)] px-4 sm:px-6 lg:px-8 pt-16 pb-16 sm:pt-24 sm:pb-20 lg:pt-28 lg:pb-24">
             <div className="flex flex-col items-center gap-12 lg:flex-row lg:items-center lg:justify-between lg:gap-16">
@@ -130,9 +132,12 @@ export default function FenntracePage() {
               {/* LEFT — Copy + CTA */}
               <div className="flex flex-1 flex-col gap-8 text-center lg:text-left lg:max-w-xl">
                 <div className="flex flex-col gap-5">
-                  <span className="text-[11px] font-bold tracking-[0.2em] text-primary uppercase">
-                    Personal Data Exposure
-                  </span>
+                  <div className="flex items-center justify-center lg:justify-start gap-2">
+                    <span className="h-2 w-2 rounded-full bg-primary animate-ping" />
+                    <span className="text-[11px] font-bold tracking-[0.2em] text-primary uppercase font-mono">
+                      <DecryptText text="PERSONAL DATA EXPOSURE INDEX" speed={30} />
+                    </span>
+                  </div>
                   <h1 className="text-4xl font-semibold tracking-[-0.025em] text-foreground sm:text-5xl lg:text-[3.5rem] text-balance leading-[1.1]">
                     Know where your data has surfaced.
                   </h1>
@@ -152,13 +157,16 @@ export default function FenntracePage() {
                 <PrivacyPromise className="mx-auto lg:mx-0" />
               </div>
 
-              {/* RIGHT — Static investigation preview */}
+              {/* RIGHT — Interactive investigation preview with Spotlight & Border Beam */}
               <div className="hidden lg:flex lg:flex-shrink-0 lg:items-center lg:justify-end">
                 <InvestigationSnapshot />
               </div>
             </div>
           </div>
         </section>
+
+        {/* Breach Marquee Ticker Strip */}
+        <BreachMarquee />
 
         {/* Preview on mobile/tablet — below hero */}
         <div className="flex justify-center px-4 pb-12 lg:hidden">

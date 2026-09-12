@@ -1,84 +1,120 @@
 /**
- * Fenntrace — Scan Sequence
+ * Fenntrace — High-Tech Radar Scan Sequence
  *
  * Displayed during the "checking" state.
- * Calm, branded investigation loading experience.
- *
- * Uses the Fenntrace F mark as a visual anchor with a subtle
- * rotating ring and calm stage text progression.
- *
- * Respects prefers-reduced-motion.
- * Architecture supports future Lottie replacement without restructuring.
+ * Features:
+ * - Concentric sonar pulse circles
+ * - Rotating radar sweep beam
+ * - Live terminal log stream with simulated verification events
+ * - Smooth progress bar
  */
 
 "use client"
 
 import { useEffect, useState } from "react"
+import { Shield, Terminal } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-const SCAN_STAGES = [
-  { label: "Validating", description: "Checking email format." },
-  { label: "Querying", description: "Checking known exposure records." },
-  { label: "Interpreting", description: "Analyzing exposure results." },
-  { label: "Complete", description: "Preparing your report." },
-] as const
-
-const STAGE_DURATION = 550
+const LOG_MESSAGES = [
+  "Initializing zero-retention ephemeral session...",
+  "Querying breach intelligence registry...",
+  "Cross-referencing compromised credential hashes...",
+  "Evaluating multi-vector threat risk matrix...",
+  "Formulating prioritized remediation action plan...",
+]
 
 export function ScanSequence({ className }: { className?: string }) {
-  const [activeStage, setActiveStage] = useState(0)
+  const [currentStep, setCurrentStep] = useState(0)
 
   useEffect(() => {
-    if (activeStage >= SCAN_STAGES.length - 1) return
-    const timer = setTimeout(() => {
-      setActiveStage((prev) => Math.min(prev + 1, SCAN_STAGES.length - 1))
-    }, STAGE_DURATION)
-    return () => clearTimeout(timer)
-  }, [activeStage])
+    const timer = setInterval(() => {
+      setCurrentStep((prev) => (prev < LOG_MESSAGES.length - 1 ? prev + 1 : prev))
+    }, 450)
+
+    return () => clearInterval(timer)
+  }, [])
 
   return (
     <div
       className={cn(
-        "flex flex-1 flex-col items-center justify-center gap-8 py-24 sm:py-32",
+        "flex flex-1 flex-col items-center justify-center gap-8 py-20 sm:py-28 max-w-lg mx-auto w-full",
         className
       )}
       role="status"
       aria-live="polite"
-      aria-label="Checking your email for known exposures"
+      aria-label="Checking email for known exposures"
     >
-      {/* F mark with subtle ring — Lottie-replaceable container */}
-      <div className="relative flex items-center justify-center" data-lottie-target="scan-loader">
-        {/* Outer ring */}
-        <div className="absolute h-20 w-20 rounded-full border border-border/40 motion-safe:animate-[spin_4s_linear_infinite]" />
-
-        {/* Inner F mark */}
-        <svg
-          width="32"
-          height="32"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="text-primary"
-        >
-          <path d="M6 4h12v2H8v4h8v2H8v8H6V4z" fill="currentColor" />
-        </svg>
-      </div>
-
-      {/* Stage text */}
-      <div className="flex flex-col items-center gap-2 text-center">
-        <p className="text-lg font-medium text-foreground tracking-tight">
-          Investigating
-        </p>
-        <p className="text-sm text-muted-foreground transition-opacity duration-300">
-          {SCAN_STAGES[activeStage].description}
-        </p>
-      </div>
-
-      {/* Progress bar */}
-      <div className="h-px w-32 overflow-hidden rounded-full bg-border/40">
+      {/* Radar Sonar Visualizer */}
+      <div className="relative flex h-36 w-36 items-center justify-center">
+        {/* Pulsing Sonar Waves */}
+        <div className="animate-sonar absolute inset-0 rounded-full border border-primary/40 bg-primary/5" />
         <div
-          className="h-full bg-primary transition-all duration-500 ease-out"
-          style={{ width: `${((activeStage + 1) / SCAN_STAGES.length) * 100}%` }}
+          className="animate-sonar absolute inset-0 rounded-full border border-primary/20"
+          style={{ animationDelay: "0.8s" }}
+        />
+
+        {/* Static concentric grid rings */}
+        <div className="absolute h-32 w-32 rounded-full border border-border/60" />
+        <div className="absolute h-20 w-20 rounded-full border border-border/40" />
+
+        {/* Crosshair axis lines */}
+        <div className="absolute h-full w-px bg-border/40" />
+        <div className="absolute h-px w-full bg-border/40" />
+
+        {/* Rotating Radar Sweep Cone */}
+        <div className="animate-radar absolute inset-0 rounded-full bg-[conic-gradient(from_0deg,transparent_0_300deg,oklch(0.68_0.12_240/25%)_360deg)] pointer-events-none" />
+
+        {/* Center Shield Icon */}
+        <div className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-primary/50 bg-background shadow-lg shadow-primary/20">
+          <Shield className="h-5 w-5 text-primary animate-pulse" />
+        </div>
+      </div>
+
+      {/* Headline & Progress */}
+      <div className="flex flex-col items-center gap-2 text-center">
+        <h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
+          <span>Active Investigation in Progress</span>
+          <span className="inline-block h-2 w-2 rounded-full bg-primary animate-ping" />
+        </h2>
+        <p className="text-xs text-muted-foreground">
+          Querying indexed breach archives with zero data retention
+        </p>
+      </div>
+
+      {/* High-Tech Terminal Log Stream */}
+      <div className="w-full rounded-xl border border-border/70 bg-card/90 p-4 font-mono text-[11px] shadow-lg backdrop-blur-sm">
+        <div className="flex items-center justify-between pb-2 mb-2 border-b border-border/40 text-muted-foreground text-[10px]">
+          <span className="flex items-center gap-1.5">
+            <Terminal className="h-3 w-3 text-primary" />
+            FENNTRACE_ENGINE_V1
+          </span>
+          <span className="text-ft-success">SECURE_PIPE</span>
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          {LOG_MESSAGES.slice(0, currentStep + 1).map((msg, index) => (
+            <div
+              key={index}
+              className={cn(
+                "flex items-center gap-2 transition-all duration-200",
+                index === currentStep ? "text-primary font-medium" : "text-muted-foreground/80"
+              )}
+            >
+              <span className="text-[10px] text-muted-foreground/60 select-none">
+                0{index + 1}
+              </span>
+              <span className="text-primary/70 select-none">&gt;</span>
+              <span className="truncate">{msg}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Smooth Progress Bar */}
+      <div className="h-1 w-48 overflow-hidden rounded-full bg-secondary/80">
+        <div
+          className="h-full bg-primary transition-all duration-300 ease-out"
+          style={{ width: `${((currentStep + 1) / LOG_MESSAGES.length) * 100}%` }}
         />
       </div>
     </div>
