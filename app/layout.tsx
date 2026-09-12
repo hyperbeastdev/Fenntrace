@@ -21,6 +21,14 @@ export const metadata: Metadata = {
   title: "Fenntrace — Personal Data Exposure Checker",
   description:
     "Understand your exposure without turning your email into a profile. Check if your email appears in known data breaches.",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+  },
 }
 
 export default function RootLayout({
