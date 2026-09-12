@@ -72,9 +72,9 @@ export function InvestigationSnapshot({ className }: { className?: string }) {
         </span>
         <div className="flex flex-col gap-1.5">
           {[
-            { name: "SocialConnect", severity: "critical" as const, year: "2024" },
-            { name: "ShopEase", severity: "high" as const, year: "2023" },
-            { name: "GameVault", severity: "moderate" as const, year: "2023" },
+            { name: "Canva", severity: "critical" as const, year: "2019" },
+            { name: "Adobe", severity: "critical" as const, year: "2013" },
+            { name: "LinkedIn", severity: "high" as const, year: "2016" },
           ].map((item) => (
             <div
               key={item.name}

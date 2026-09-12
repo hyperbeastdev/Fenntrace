@@ -33,10 +33,10 @@ import {
   ClearedView,
 } from "@/components/result-views"
 import { useExposureCheck } from "@/features/check/use-exposure-check"
-import { DemoProvider } from "@/demo/provider"
+import { HttpExposureProvider } from "@/lib/client/http-provider"
 
 export default function FenntracePage() {
-  const provider = useMemo(() => new DemoProvider(), [])
+  const provider = useMemo(() => new HttpExposureProvider(), [])
   const { state, submitEmail, erase, restart, retry } = useExposureCheck(provider)
 
   const isLanding = state.status === "idle" || state.status === "invalid"

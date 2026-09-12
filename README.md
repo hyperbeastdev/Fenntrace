@@ -129,49 +129,68 @@ Open [http://localhost:3000](http://localhost:3001) with your browser to see the
 
 ## Environment variables
 
-No environment variables are required for the current demo configuration. The prototype runs entirely locally without requiring external API keys.
+Fenntrace supports both live breach intelligence and offline realistic modes:
 
-## Architecture / flow
+```env
+# Have I Been Pwned API Key (Optional for live internet-wide breach queries)
+HIBP_API_KEY=
+
+# Provider Mode ("auto" | "hibp" | "local")
+FENNTRACE_PROVIDER=auto
+
+# Rate Limiting Configuration (requests per client IP)
+RATE_LIMIT_MAX=15
+RATE_LIMIT_WINDOW_MS=60000
+```
+
+## Backend Architecture & API Routes
+
+Fenntrace features a production-ready Next.js App Router backend with built-in privacy safeguards and abuse prevention:
+
+* **`POST /api/check`**: Primary exposure investigation endpoint. Applies rate limiting, zero-log masking, queries the active provider (HIBP live v3 or Local Breach Engine), calculates threat risk level, and generates a prioritized remediation action plan.
+* **`POST /api/check-password`**: Privacy-preserving **k-Anonymity** password exposure check using the HIBP Pwned Passwords range API (receives 5-character SHA-1 hash prefix; passwords and full hashes never leave the client).
+* **`GET /api/breaches`**: Catalog of indexed breaches with breach statistics, data category breakdowns, and severity tiers.
+* **`GET /api/health`**: System status and active breach provider diagnostic information.
+
+### Security & Privacy Protections
+* **In-memory Sliding Window Rate Limiting**: Prevents bot scrapers and brute-force email status enumeration.
+* **Zero Data Retention**: Zero persistence of queried emails, with standard `no-store, no-cache` headers to prevent intermediary CDN/browser caching.
+* **Safe Log Sanitization**: Emails are masked (e.g. `al***a@example.com`) in server execution logs.
+
+## Architecture / Flow
 
 ```text
 User
   ↓
 Enter email address on Landing Page
   ↓
-Submit form (triggers transient React state)
+Submit form (triggers client HttpExposureProvider)
   ↓
-Simulate network request (demo dataset)
+POST /api/check (Server Route with Sliding-Window Rate Limiting)
   ↓
-Return Exposure Analysis (records, severity, types)
+Exposure Provider Factory (Live HIBP v3 API or Local Breach Intelligence)
+  ↓
+Data Category & Severity Classification Mapper
+  ↓
+Domain Risk & Remediation Derivation
+  ↓
+Return Sanitized Exposure Analysis (zero log persistence)
   ↓
 Render Investigation Report (replaces Landing Page)
   ↓
-User reviews Recommended Actions
-  ↓
-User clicks "Erase this check" (resets state)
+User reviews Prioritized Actions or clicks "Erase this check" (resets state)
 ```
 
-## Current limitations
+## Future Direction
 
-As a hackathon prototype, Fenntrace currently has the following limitations:
-
-* **Demo dataset:** The current implementation uses a controlled, static dataset for demonstration purposes. 
-* **Not an internet-wide scanner:** It is not a live integration with HaveIBeenPwned or similar APIs and is not a guarantee of complete internet-wide exposure detection.
-* **Absence of a record:** A "clean" result in this prototype does not prove that an email has never been exposed in the real world.
-* **No authentication:** It is not an identity or authentication system.
-* **Not professional advice:** Results and recommendations are illustrative and are not intended to be a substitute for professional cybersecurity investigation or incident response.
-
-## Future direction
-
-* **Live breach intelligence integrations:** Connecting the frontend to real-world APIs (e.g., HIBP, DeHashed).
 * **Continuous exposure monitoring:** Allowing users to opt-in to alerts when new exposures are discovered.
-* **Stronger privacy-preserving lookups:** Implementing k-Anonymity or localized hashing so the raw email is never transmitted to the server.
 * **Richer remediation workflows:** Deep-linking directly to service provider password-reset pages or account deletion forms.
 
-## Hackathon context
+## Hackathon Context
 
-Fenntrace was built as a prototype for a hackathon. The goal of the project is to demonstrate a superior, privacy-first user experience for personal data exposure checking. It focuses heavily on design, interaction, and frontend architecture to present a vision of how security tools should feel for everyday people.
+Fenntrace demonstrates a superior, privacy-first user experience and robust architecture for personal data exposure checking. It focuses on design, interaction, transparency, and production-ready engineering for everyday people.
 
 ## License
 
-TODO: Add license information.
+MIT License.
+
