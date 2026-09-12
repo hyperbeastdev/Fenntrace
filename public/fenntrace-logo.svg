@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="150 100 1350 400" fill="none" role="img" aria-labelledby="title">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="160 100 1180 400" fill="none" role="img" aria-labelledby="title">
   <title id="title">Fenntrace</title>
 
   <g stroke="#fff" stroke-linecap="square" stroke-linejoin="miter" stroke-width="15">
@@ -9,11 +9,12 @@
   </g>
 
   <text
-    x="545"
+    x="500"
     y="355"
     fill="#fff"
     font-family="Arial, Helvetica, sans-serif"
     font-size="180"
     font-weight="400"
-  >Fenntrace</text>
+    letter-spacing="-0.02em"
+  >enntrace</text>
 </svg>
