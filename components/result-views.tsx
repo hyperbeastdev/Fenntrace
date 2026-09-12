@@ -2,16 +2,22 @@
  * Fenntrace — Result Views
  *
  * State-specific result views for found, notFound, unavailable, error, and cleared.
- * Each view is a focused composition — not a generic catch-all.
+ * Each view is a focused composition with interactive filtering, threat matrix,
+ * and actionable remediation.
  */
 
+"use client"
+
+import { useState, useMemo } from "react"
+import { Filter } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import type { ExposureResult } from "@/domain/types"
+import type { ExposureResult, BreachRecord } from "@/domain/types"
 import { getActionPlan } from "@/domain/helpers"
 import { ExposureStatus } from "./exposure-status"
 import { BreachCard } from "./breach-card"
 import { ActionPlan } from "./action-plan"
+import { ThreatMatrix } from "./threat-matrix"
 import { MethodDisclosure } from "./method-disclosure"
 
 // ---------------------------------------------------------------------------
@@ -25,25 +31,122 @@ interface FoundViewProps {
 }
 
 export function FoundView({ result, onErase, onRestart }: FoundViewProps) {
+  const [filter, setFilter] = useState<"all" | "passwords" | "critical" | "recent">("all")
   const actions = getActionPlan(result)
+
+  // Filter breaches based on selection
+  const filteredBreaches = useMemo(() => {
+    switch (filter) {
+      case "passwords":
+        return result.breaches.filter((b) => b.dataCategories.includes("Password"))
+      case "critical":
+        return result.breaches.filter((b) => b.severity === "critical" || b.severity === "high")
+      case "recent":
+        return result.breaches.filter((b) => {
+          const year = parseInt(b.date.slice(0, 4), 10)
+          return year >= 2018
+        })
+      case "all":
+      default:
+        return result.breaches
+    }
+  }, [result.breaches, filter])
+
+  const passwordCount = result.breaches.filter((b) => b.dataCategories.includes("Password")).length
+  const criticalCount = result.breaches.filter((b) => b.severity === "critical" || b.severity === "high").length
 
   return (
     <div className="flex flex-col gap-8">
       <ExposureStatus result={result} />
 
-      {/* Breach timeline */}
+      {/* Threat Exposure Matrix */}
+      <ThreatMatrix result={result} />
+
+      {/* Breach timeline with Filter Chips */}
       <section className="flex flex-col gap-4" aria-label="Breach records">
-        <h2 className="text-lg font-semibold tracking-[-0.01em] text-foreground">
-          Breach timeline
-        </h2>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-lg font-semibold tracking-[-0.01em] text-foreground">
+            Breach timeline
+          </h2>
+
+          {/* Filter Pills */}
+          <div className="flex flex-wrap items-center gap-1.5 text-xs">
+            <span className="text-muted-foreground mr-1 flex items-center gap-1">
+              <Filter className="h-3 w-3" /> Filter:
+            </span>
+            <button
+              type="button"
+              onClick={() => setFilter("all")}
+              className={cn(
+                "px-2.5 py-1 rounded-md transition-colors",
+                filter === "all"
+                  ? "bg-primary text-primary-foreground font-semibold"
+                  : "bg-secondary text-muted-foreground hover:text-foreground"
+              )}
+            >
+              All ({result.breaches.length})
+            </button>
+
+            {passwordCount > 0 && (
+              <button
+                type="button"
+                onClick={() => setFilter("passwords")}
+                className={cn(
+                  "px-2.5 py-1 rounded-md transition-colors",
+                  filter === "passwords"
+                    ? "bg-ft-danger text-white font-semibold"
+                    : "bg-secondary text-muted-foreground hover:text-foreground"
+                )}
+              >
+                Passwords ({passwordCount})
+              </button>
+            )}
+
+            {criticalCount > 0 && (
+              <button
+                type="button"
+                onClick={() => setFilter("critical")}
+                className={cn(
+                  "px-2.5 py-1 rounded-md transition-colors",
+                  filter === "critical"
+                    ? "bg-primary text-primary-foreground font-semibold"
+                    : "bg-secondary text-muted-foreground hover:text-foreground"
+                )}
+              >
+                Critical / High ({criticalCount})
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={() => setFilter("recent")}
+              className={cn(
+                "px-2.5 py-1 rounded-md transition-colors",
+                filter === "recent"
+                  ? "bg-primary text-primary-foreground font-semibold"
+                  : "bg-secondary text-muted-foreground hover:text-foreground"
+              )}
+            >
+              2018+
+            </button>
+          </div>
+        </div>
+
         <div className="flex flex-col gap-3">
-          {result.breaches.map((breach) => (
-            <BreachCard key={breach.id} breach={breach} />
-          ))}
+          {filteredBreaches.length === 0 ? (
+            <div className="p-6 text-center rounded-xl border border-border/50 bg-card text-xs text-muted-foreground">
+              No breaches match the active filter.
+            </div>
+          ) : (
+            filteredBreaches.map((breach) => (
+              <BreachCard key={breach.id} breach={breach} />
+            ))
+          )}
         </div>
       </section>
 
-      <ActionPlan actions={actions} />
+      {/* Action Plan Checklist & Export */}
+      <ActionPlan actions={actions} result={result} />
 
       <MethodDisclosure source={result.source} />
 
@@ -227,7 +330,7 @@ export function ClearedView({ onRestart }: ClearedViewProps) {
 
 function ResultActions({ onErase, onRestart }: { onErase: () => void; onRestart: () => void }) {
   return (
-    <section className="flex flex-col gap-6 border-t border-border pt-8">
+    <section className="flex flex-col gap-6 border-t border-border pt-8 print:hidden">
       {/* Primary action — check another */}
       <div className="flex flex-col items-center gap-2">
         <Button
@@ -249,14 +352,16 @@ function ResultActions({ onErase, onRestart }: { onErase: () => void; onRestart:
           variant="outline"
           onClick={onErase}
           className={cn(
-            "rounded-lg border-destructive/30 text-destructive",
+            "rounded-lg border-destructive/30 text-destructive gap-2",
             "hover:bg-ft-danger-muted hover:text-destructive"
           )}
         >
-          Erase this check
+          <span>Erase this check</span>
+          <kbd className="hidden sm:inline text-[10px] font-mono px-1.5 py-0.5 rounded bg-destructive/10 border border-destructive/20">
+            Esc
+          </kbd>
         </Button>
       </div>
     </section>
   )
 }
-

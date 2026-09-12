@@ -206,4 +206,37 @@
       scroll-behavior: auto !important;
     }
   }
-}
+
+  /* Print Stylesheet for PDF and Paper Export */
+  @media print {
+    body {
+      background: white !important;
+      color: black !important;
+    }
+
+    header,
+    footer,
+    nav,
+    button:not([data-print-visible]) {
+      display: none !important;
+    }
+
+    article,
+    section,
+    .border {
+      border-color: #ddd !important;
+      background: #fafafa !important;
+      color: #111 !important;
+      box-shadow: none !important;
+    }
+
+    .text-muted-foreground,
+    .text-ft-text-muted {
+      color: #555 !important;
+    }
+
+    .text-foreground {
+      color: #000 !important;
+    }
+  }
+}

@@ -117,7 +117,7 @@ export function EmailCheckForm({
               aria-invalid={hasError || undefined}
               aria-describedby={hasError ? errorId : undefined}
               className={cn(
-                "h-12 w-full rounded-lg border bg-card px-4 text-[15px] text-foreground",
+                "h-12 w-full rounded-lg border bg-card pl-4 pr-9 text-[15px] text-foreground",
                 "placeholder:text-muted-foreground/60",
                 "outline-none transition-colors duration-150",
                 "focus:border-primary focus:ring-2 focus:ring-primary/25",
@@ -128,6 +128,13 @@ export function EmailCheckForm({
                   : "border-border"
               )}
             />
+            {!email && (
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none hidden sm:flex items-center">
+                <kbd className="text-[11px] font-mono text-muted-foreground/60 border border-border/60 bg-background/50 px-1.5 py-0.5 rounded">
+                  /
+                </kbd>
+              </div>
+            )}
           </div>
 
           <Button

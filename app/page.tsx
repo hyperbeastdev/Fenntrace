@@ -17,10 +17,11 @@
 
 "use client"
 
-import { useMemo } from "react"
+import { useMemo, useCallback } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { EmailCheckForm } from "@/components/email-check-form"
+import { HeroInvestigationTabs } from "@/components/hero-investigation-tabs"
 import { PrivacyPromise } from "@/components/privacy-promise"
 import { InvestigationSnapshot } from "@/components/investigation-snapshot"
 import { CapabilityGrid } from "@/components/capability-grid"
@@ -34,12 +35,30 @@ import {
 } from "@/components/result-views"
 import { useExposureCheck } from "@/features/check/use-exposure-check"
 import { HttpExposureProvider } from "@/lib/client/http-provider"
+import { useKeyboardShortcuts } from "@/hooks/use-keyboard-shortcuts"
 
 export default function FenntracePage() {
   const provider = useMemo(() => new HttpExposureProvider(), [])
   const { state, submitEmail, erase, restart, retry } = useExposureCheck(provider)
 
   const isLanding = state.status === "idle" || state.status === "invalid"
+
+  // Keyboard shortcut handlers
+  const handleFocusInput = useCallback(() => {
+    const input = document.querySelector<HTMLInputElement>("input[type='email'], input[type='password'], input[type='text']")
+    input?.focus()
+  }, [])
+
+  const handleEscape = useCallback(() => {
+    if (!isLanding) {
+      erase()
+    }
+  }, [isLanding, erase])
+
+  useKeyboardShortcuts({
+    onFocusInput: handleFocusInput,
+    onEscape: handleEscape,
+  })
 
   return (
     <div className="flex min-h-svh flex-col">
@@ -123,15 +142,11 @@ export default function FenntracePage() {
                 </div>
 
                 <div className="w-full max-w-md mx-auto lg:mx-0">
-                  <EmailCheckForm
-                    onSubmit={submitEmail}
-                    isSubmitting={state.status === "checking"}
+                  <HeroInvestigationTabs
+                    onEmailSubmit={submitEmail}
+                    isSubmittingEmail={state.status === "checking"}
+                    emailError={state.status === "invalid" ? state.error : undefined}
                   />
-                  {state.status === "invalid" && (
-                    <p role="alert" className="mt-3 text-sm text-destructive font-medium">
-                      {state.error}
-                    </p>
-                  )}
                 </div>
 
                 <PrivacyPromise className="mx-auto lg:mx-0" />
