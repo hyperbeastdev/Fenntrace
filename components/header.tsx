@@ -128,13 +128,6 @@ export function Header({ className, showNav = true, onLogoClick }: HeaderProps) 
             </>
           )}
 
-          <Link
-            href="/lab"
-            className="text-xs sm:text-sm font-semibold text-primary transition-colors hover:text-primary/80 focus-visible:outline-none flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-primary/10 border border-primary/20"
-          >
-            <span>🧪 Lab</span>
-          </Link>
-
           <ProviderStatusBadge className="inline-flex sm:hidden" />
         </nav>
       </div>
