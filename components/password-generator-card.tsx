@@ -1,5 +1,5 @@
 /**
- * Fenntrace — Password Generator & Entropy Lab
+ * Fenntrace — Password Generator & Entropy
  *
  * Cryptographically secure pseudo-random number generator (CSPRNG)
  * using the browser Web Crypto API.
@@ -8,7 +8,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { KeyRound, RefreshCw, Copy, Check, ShieldCheck, Sparkles } from "lucide-react"
+import { KeyRound, RefreshCw, Copy, Check } from "lucide-react"
 import { SpotlightCard } from "@/components/ui/spotlight-card"
 import { Button } from "@/components/ui/button"
 import { cyberAudio } from "@/components/ui/cyber-audio"
@@ -53,7 +53,7 @@ export function PasswordGeneratorCard({ className }: { className?: string }) {
   const entropyBits = Math.round(length * (includeSymbols ? 6.55 : 5.95))
 
   return (
-    <section id="password-lab" className={cn("py-16 sm:py-20 border-t border-border/30", className)}>
+    <section id="password-generator" className={cn("py-16 sm:py-20 border-t border-border/30", className)}>
       <div className="mb-10 flex flex-col gap-2">
         <span className="text-[11px] font-bold tracking-[0.2em] text-primary uppercase font-mono">
           Proactive Defense

@@ -114,10 +114,10 @@ export function Header({ className, showNav = true, onLogoClick }: HeaderProps) 
                 Telemetry
               </a>
               <a
-                href="/#password-lab"
+                href="/#password-generator"
                 className="hidden lg:inline text-xs sm:text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:text-foreground"
               >
-                Password Lab
+                Password Generator
               </a>
               <a
                 href="/#faq"

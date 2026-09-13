@@ -52,10 +52,10 @@ export function Footer({ className }: { className?: string }) {
                 Telemetry Radar
               </a>
               <a
-                href="/#password-lab"
+                href="/#password-generator"
                 className="text-sm text-muted-foreground transition-colors hover:text-foreground w-fit"
               >
-                Password Lab
+                Password Generator
               </a>
               <a
                 href="/"
