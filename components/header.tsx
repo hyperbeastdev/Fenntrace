@@ -67,7 +67,14 @@ export function Header({ className, showNav = true, onLogoClick }: HeaderProps) 
         </div>
 
         {/* Navigation */}
-        <nav className="flex items-center gap-5 sm:gap-7" aria-label="Main navigation">
+        <nav className="flex items-center gap-4 sm:gap-6" aria-label="Main navigation">
+          <Link
+            href="/lab"
+            className="text-xs sm:text-sm font-semibold text-primary transition-colors hover:text-primary/80 focus-visible:outline-none flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-primary/10 border border-primary/20"
+          >
+            <span>🧪 Feature Lab</span>
+          </Link>
+
           <Link
             href="/breaches"
             className="text-xs sm:text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:text-foreground"

@@ -34,6 +34,12 @@ export function Footer({ className }: { className?: string }) {
             </span>
             <nav className="flex flex-col gap-1.5" aria-label="Product links">
               <Link
+                href="/lab"
+                className="text-sm text-primary font-medium transition-colors hover:text-primary/80 w-fit flex items-center gap-1"
+              >
+                🧪 Feature Lab (Preview)
+              </Link>
+              <Link
                 href="/breaches"
                 className="text-sm text-muted-foreground transition-colors hover:text-foreground w-fit"
               >
