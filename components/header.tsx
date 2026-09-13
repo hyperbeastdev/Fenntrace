@@ -2,17 +2,20 @@
  * Fenntrace — Site Header
  *
  * Minimal navigation bar with the original Fenntrace landscape logo
- * on the left and restrained navigation on the right.
+ * on the left, audio synthesizer toggle, and navigation on the right.
  *
  * Logo is always clickable and navigates home.
  */
 
 "use client"
 
+import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { Volume2, VolumeX } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ProviderStatusBadge } from "@/components/provider-status-badge"
+import { cyberAudio } from "@/components/ui/cyber-audio"
 
 interface HeaderProps {
   className?: string
@@ -23,6 +26,17 @@ interface HeaderProps {
 }
 
 export function Header({ className, showNav = true, onLogoClick }: HeaderProps) {
+  const [audioActive, setAudioActive] = useState(true)
+
+  const toggleAudio = () => {
+    const next = !audioActive
+    setAudioActive(next)
+    cyberAudio.enabled = next
+    if (next) {
+      cyberAudio.playClick()
+    }
+  }
+
   const logoElement = (
     <Image
       src="/fenntrace-logo.svg"
@@ -67,13 +81,22 @@ export function Header({ className, showNav = true, onLogoClick }: HeaderProps) 
         </div>
 
         {/* Navigation */}
-        <nav className="flex items-center gap-4 sm:gap-6" aria-label="Main navigation">
-          <Link
-            href="/lab"
-            className="text-xs sm:text-sm font-semibold text-primary transition-colors hover:text-primary/80 focus-visible:outline-none flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-primary/10 border border-primary/20"
+        <nav className="flex items-center gap-3 sm:gap-5" aria-label="Main navigation">
+          {/* Audio Synthesizer Toggle */}
+          <button
+            type="button"
+            onClick={toggleAudio}
+            title={audioActive ? "Mute cyber audio effects" : "Enable cyber audio effects"}
+            className={cn(
+              "flex h-8 w-8 items-center justify-center rounded-lg border transition-colors",
+              audioActive
+                ? "border-primary/40 bg-primary/10 text-primary hover:bg-primary/20"
+                : "border-border bg-secondary/50 text-muted-foreground hover:text-foreground"
+            )}
+            aria-label={audioActive ? "Mute audio" : "Unmute audio"}
           >
-            <span>🧪 Feature Lab</span>
-          </Link>
+            {audioActive ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+          </button>
 
           <Link
             href="/breaches"
@@ -85,19 +108,32 @@ export function Header({ className, showNav = true, onLogoClick }: HeaderProps) 
           {showNav && (
             <>
               <a
-                href="/#how-it-works"
-                className="hidden sm:inline text-xs sm:text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:text-foreground"
+                href="/#radar"
+                className="hidden md:inline text-xs sm:text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:text-foreground"
               >
-                How it works
+                Telemetry
               </a>
               <a
-                href="/#privacy"
+                href="/#password-lab"
+                className="hidden lg:inline text-xs sm:text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:text-foreground"
+              >
+                Password Lab
+              </a>
+              <a
+                href="/#faq"
                 className="hidden sm:inline text-xs sm:text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:text-foreground"
               >
-                Privacy
+                FAQ
               </a>
             </>
           )}
+
+          <Link
+            href="/lab"
+            className="text-xs sm:text-sm font-semibold text-primary transition-colors hover:text-primary/80 focus-visible:outline-none flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-primary/10 border border-primary/20"
+          >
+            <span>🧪 Lab</span>
+          </Link>
 
           <ProviderStatusBadge className="inline-flex sm:hidden" />
         </nav>
@@ -105,4 +141,3 @@ export function Header({ className, showNav = true, onLogoClick }: HeaderProps) 
     </header>
   )
 }
-

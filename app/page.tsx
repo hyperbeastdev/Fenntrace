@@ -1,23 +1,20 @@
 /**
- * Fenntrace — Main Page
+ * Fenntrace — Main Application Landing Page
  *
- * Single-page exposure check experience.
- * Renders exactly ONE of two product states:
+ * Single-page exposure check experience with comprehensive visual
+ * enhancements, sound feedback, 3D tilt cards, interactive telemetry radar,
+ * password entropy lab, and architectural transparency FAQ.
  *
+ * State Machine:
  *   STATE A — LANDING (idle, invalid)
- *     The product introduction page. The investigation report
- *     never appears here.
- *
  *   STATE B — APPLICATION (checking, found, notFound, unavailable, error, cleared)
- *     The investigation experience. The landing page disappears
- *     entirely when this state is active.
  *
- * All state lives in React memory. Nothing is persisted.
+ * All state lives in transient React memory. Nothing is persisted.
  */
 
 "use client"
 
-import { useMemo, useCallback } from "react"
+import { useMemo, useCallback, useEffect } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { EmailCheckForm } from "@/components/email-check-form"
@@ -28,6 +25,12 @@ import { CapabilityGrid } from "@/components/capability-grid"
 import { ScanSequence } from "@/components/scan-sequence"
 import { BreachMarquee } from "@/components/ui/breach-marquee"
 import { DecryptText } from "@/components/ui/decrypt-text"
+import { StatsRibbon } from "@/components/stats-ribbon"
+import { CyberNodes } from "@/components/ui/cyber-nodes"
+import { PasswordGeneratorCard } from "@/components/password-generator-card"
+import { FaqAccordion } from "@/components/faq-accordion"
+import { MatrixRain } from "@/components/ui/matrix-rain"
+import { cyberAudio } from "@/components/ui/cyber-audio"
 import {
   FoundView,
   NotFoundView,
@@ -45,9 +48,20 @@ export default function FenntracePage() {
 
   const isLanding = state.status === "idle" || state.status === "invalid"
 
+  // Trigger sound cues on state changes
+  useEffect(() => {
+    if (state.status === "found") {
+      cyberAudio.playAlert()
+    } else if (state.status === "notFound") {
+      cyberAudio.playSuccessChime()
+    }
+  }, [state.status])
+
   // Keyboard shortcut handlers
   const handleFocusInput = useCallback(() => {
-    const input = document.querySelector<HTMLInputElement>("input[type='email'], input[type='password'], input[type='text']")
+    const input = document.querySelector<HTMLInputElement>(
+      "input[type='email'], input[type='password'], input[type='text']"
+    )
     input?.focus()
   }, [])
 
@@ -126,27 +140,27 @@ export default function FenntracePage() {
           {/* Subtle ambient glowing orb */}
           <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-primary/10 rounded-full blur-[140px] pointer-events-none animate-pulse duration-1000" />
 
-          <div className="relative z-10 mx-auto w-full max-w-[var(--content-max-width)] px-4 sm:px-6 lg:px-8 pt-16 pb-16 sm:pt-24 sm:pb-20 lg:pt-28 lg:pb-24">
+          <div className="relative z-10 mx-auto w-full max-w-[var(--content-max-width)] px-4 sm:px-6 lg:px-8 pt-14 pb-14 sm:pt-20 sm:pb-18 lg:pt-24 lg:pb-20">
             <div className="flex flex-col items-center gap-12 lg:flex-row lg:items-center lg:justify-between lg:gap-16">
 
-              {/* LEFT — Copy + CTA */}
-              <div className="flex flex-1 flex-col gap-8 text-center lg:text-left lg:max-w-xl">
-                <div className="flex flex-col gap-5">
+              {/* LEFT — Copy + 3-Way Investigation Tabs */}
+              <div className="flex flex-1 flex-col gap-7 text-center lg:text-left lg:max-w-xl">
+                <div className="flex flex-col gap-4">
                   <div className="flex items-center justify-center lg:justify-start gap-2">
                     <span className="h-2 w-2 rounded-full bg-primary animate-ping" />
                     <span className="text-[11px] font-bold tracking-[0.2em] text-primary uppercase font-mono">
                       <DecryptText text="PERSONAL DATA EXPOSURE INDEX" speed={30} />
                     </span>
                   </div>
-                  <h1 className="text-4xl font-semibold tracking-[-0.025em] text-foreground sm:text-5xl lg:text-[3.5rem] text-balance leading-[1.1]">
+                  <h1 className="text-4xl font-semibold tracking-[-0.025em] text-foreground sm:text-5xl lg:text-[3.4rem] text-balance leading-[1.1]">
                     Know where your data has surfaced.
                   </h1>
-                  <p className="max-w-lg text-lg leading-relaxed text-muted-foreground text-balance mx-auto lg:mx-0">
-                    Find out whether your email appears in known data breaches — and understand what was exposed and what to do next.
+                  <p className="max-w-lg text-base sm:text-lg leading-relaxed text-muted-foreground text-balance mx-auto lg:mx-0">
+                    Audit email addresses, verify password leaks with client-side k-Anonymity, and examine company domain exposure records.
                   </p>
                 </div>
 
-                <div className="w-full max-w-md mx-auto lg:mx-0">
+                <div className="w-full max-w-lg mx-auto lg:mx-0">
                   <HeroInvestigationTabs
                     onEmailSubmit={submitEmail}
                     isSubmittingEmail={state.status === "checking"}
@@ -157,7 +171,7 @@ export default function FenntracePage() {
                 <PrivacyPromise className="mx-auto lg:mx-0" />
               </div>
 
-              {/* RIGHT — Interactive investigation preview with Spotlight & Border Beam */}
+              {/* RIGHT — 3D Holographic Tilt Card Product Preview */}
               <div className="hidden lg:flex lg:flex-shrink-0 lg:items-center lg:justify-end">
                 <InvestigationSnapshot />
               </div>
@@ -169,7 +183,7 @@ export default function FenntracePage() {
         <BreachMarquee />
 
         {/* Preview on mobile/tablet — below hero */}
-        <div className="flex justify-center px-4 pb-12 lg:hidden">
+        <div className="flex justify-center px-4 py-8 lg:hidden">
           <InvestigationSnapshot className="w-full" />
         </div>
 
@@ -178,20 +192,33 @@ export default function FenntracePage() {
             ============================================================ */}
         <div className="mx-auto w-full max-w-[var(--content-max-width)] px-4 sm:px-6 lg:px-8">
 
-          {/* Trust strip */}
-          <section className="border-t border-border/30 py-12 sm:py-16">
-            <p className="text-center text-lg font-medium tracking-tight text-muted-foreground sm:text-xl">
-              Privacy should leave a trace, not a profile.
-            </p>
+          {/* 1. Global Intelligence Stats Ribbon */}
+          <StatsRibbon />
+
+          {/* 2. Global Threat Radar & Network Arcs */}
+          <section id="radar" className="py-16 sm:py-20 border-b border-border/30">
+            <div className="mb-8 flex flex-col gap-2">
+              <span className="text-[11px] font-bold tracking-[0.2em] text-primary uppercase font-mono">
+                Threat Mesh
+              </span>
+              <h2 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+                Global Threat Intelligence Telemetry
+              </h2>
+              <p className="text-sm text-muted-foreground max-w-xl">
+                Real-time node telemetry aggregating compromised credential vectors across dark-web repositories and dump forums.
+              </p>
+            </div>
+
+            <CyberNodes />
           </section>
 
-          {/* How it works */}
-          <section id="how-it-works" className="py-16 sm:py-20 border-t border-border/30">
+          {/* 3. How It Works */}
+          <section id="how-it-works" className="py-16 sm:py-20 border-b border-border/30">
             <div className="mb-10">
-              <span className="text-[11px] font-bold tracking-[0.2em] text-primary uppercase">
+              <span className="text-[11px] font-bold tracking-[0.2em] text-primary uppercase font-mono">
                 Process
               </span>
-              <h2 className="mt-3 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
                 How it works
               </h2>
             </div>
@@ -199,65 +226,43 @@ export default function FenntracePage() {
             <div className="grid gap-8 sm:grid-cols-3">
               <HowItWorksStep
                 number="01"
-                title="Check"
-                description="Enter the email address you want to investigate."
+                title="Input Vector"
+                description="Enter an email, password prefix, or corporate domain to audit."
               />
               <HowItWorksStep
                 number="02"
-                title="Discover"
-                description="Fenntrace checks known exposure records."
+                title="Cryptographic Match"
+                description="Queries index hashes with client-side k-Anonymity without transmitting plaintext credentials."
               />
               <HowItWorksStep
                 number="03"
-                title="Understand"
-                description="See what was exposed, why it matters, and what to do next."
+                title="Remediation Plan"
+                description="Receive an interactive mitigation checklist with 1-click credential recovery actions."
               />
             </div>
           </section>
 
-          {/* Capability grid */}
-          <CapabilityGrid className="border-t border-border/30" />
+          {/* 4. Password Generator & Entropy Lab */}
+          <PasswordGeneratorCard />
 
-          {/* Privacy section */}
-          <section id="privacy" className="py-16 sm:py-20 border-t border-border/30">
-            <div className="mb-12">
-              <span className="text-[11px] font-bold tracking-[0.2em] text-primary uppercase">
-                Privacy
-              </span>
-              <h2 className="mt-3 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-                Privacy as a baseline
-              </h2>
-            </div>
+          {/* 5. Capability Grid */}
+          <CapabilityGrid className="border-b border-border/30" />
 
-            <div className="grid gap-10 sm:grid-cols-2">
-              <PrivacyItem
-                title="What is transmitted"
-                description="Only the email address is used for the lookup. No additional personal information is collected or transmitted."
-              />
-              <PrivacyItem
-                title="What is stored"
-                description="This prototype does not persist your email address or results in browser storage. All data exists only in the active session."
-              />
-              <PrivacyItem
-                title="What is checked"
-                description="Your email address is checked against known records of data breaches compiled by the Fenntrace Demo Source."
-              />
-              <PrivacyItem
-                title="Limitations"
-                description="This check queries a single source and does not establish complete internet-wide exposure. The absence of records does not guarantee that the email has never appeared in a breach."
-              />
-            </div>
-          </section>
+          {/* 6. Security Architecture FAQ */}
+          <FaqAccordion />
 
-          {/* Final CTA */}
-          <section className="border-t border-border/30 py-16 sm:py-20">
-            <div className="flex flex-col items-center gap-8 text-center">
-              <div className="flex flex-col gap-3">
-                <h2 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-                  Check your exposure
+          {/* 7. Final Interactive CTA with Matrix Canvas Backdrop */}
+          <section className="relative my-12 rounded-3xl border border-border/80 overflow-hidden bg-card/60 p-8 sm:p-14 shadow-2xl">
+            <MatrixRain opacity={0.35} speed={0.8} color="#3fb950" headColor="#58a6ff" />
+
+            <div className="relative z-10 flex flex-col items-center gap-6 text-center max-w-xl mx-auto">
+              <div className="flex flex-col gap-2">
+                <span className="h-2 w-2 rounded-full bg-primary mx-auto animate-ping" />
+                <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">
+                  Ready to audit your digital footprint?
                 </h2>
-                <p className="text-muted-foreground">
-                  Enter your email below to begin an investigation.
+                <p className="text-sm text-muted-foreground">
+                  Zero logs. Zero accounts. Pure cryptographic confidentiality.
                 </p>
               </div>
 
@@ -265,6 +270,7 @@ export default function FenntracePage() {
                 <EmailCheckForm
                   onSubmit={submitEmail}
                   isSubmitting={state.status === "checking"}
+                  showDemoChips={false}
                 />
               </div>
 
@@ -277,10 +283,6 @@ export default function FenntracePage() {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Landing page sub-components (kept local to avoid over-abstraction)
-// ---------------------------------------------------------------------------
-
 function HowItWorksStep({
   number,
   title,
@@ -291,28 +293,9 @@ function HowItWorksStep({
   description: string
 }) {
   return (
-    <div className="flex flex-col gap-3 border-l border-border/40 pl-5">
-      <span className="text-xs font-mono text-primary/80">{number}</span>
-      <h3 className="text-lg font-medium text-foreground">{title}</h3>
-      <p className="text-sm leading-relaxed text-muted-foreground">
-        {description}
-      </p>
-    </div>
-  )
-}
-
-function PrivacyItem({
-  title,
-  description,
-}: {
-  title: string
-  description: string
-}) {
-  return (
-    <div className="flex flex-col gap-2">
-      <h4 className="text-[11px] font-bold tracking-[0.2em] text-muted-foreground uppercase">
-        {title}
-      </h4>
+    <div className="flex flex-col gap-3 border-l-2 border-primary/40 pl-5 bg-card/30 py-2 rounded-r-lg">
+      <span className="text-xs font-mono text-primary font-bold">{number}</span>
+      <h3 className="text-lg font-semibold text-foreground">{title}</h3>
       <p className="text-sm leading-relaxed text-muted-foreground">
         {description}
       </p>

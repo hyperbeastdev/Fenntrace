@@ -1,17 +1,16 @@
 /**
  * Fenntrace — Email Check Form
  *
- * The hero interaction — email input + CTA.
+ * The hero interaction — email input + CTA with quick 1-click Demo Chips.
  * Handles empty, focused, invalid, valid/ready, and submitting states.
- *
- * Uses shadcn Input + Button primitives underneath,
- * customized into the Fenntrace visual language.
  */
 
 "use client"
 
 import { useCallback, useRef, useState, type FormEvent } from "react"
 import { Button } from "@/components/ui/button"
+import { Sparkles } from "lucide-react"
+import { cyberAudio } from "@/components/ui/cyber-audio"
 import { cn } from "@/lib/utils"
 import { isValidEmail } from "@/domain/helpers"
 
@@ -19,12 +18,20 @@ interface EmailCheckFormProps {
   onSubmit: (email: string) => void
   isSubmitting?: boolean
   className?: string
+  showDemoChips?: boolean
 }
+
+const DEMO_EMAILS = [
+  { email: "alex@example.com", label: "4 Breaches" },
+  { email: "clean.user@example.com", label: "0 Breaches" },
+  { email: "sarah.dev@corporate.io", label: "Corporate" },
+]
 
 export function EmailCheckForm({
   onSubmit,
   isSubmitting = false,
   className,
+  showDemoChips = true,
 }: EmailCheckFormProps) {
   const [email, setEmail] = useState("")
   const [error, setError] = useState<string | null>(null)
@@ -32,7 +39,7 @@ export function EmailCheckForm({
   const inputRef = useRef<HTMLInputElement>(null)
 
   const validate = useCallback((value: string): string | null => {
-    if (!value.trim()) return null // Don't show error on empty until submit
+    if (!value.trim()) return null
     if (!isValidEmail(value.trim())) return "Enter a valid email address"
     return null
   }, [])
@@ -58,6 +65,7 @@ export function EmailCheckForm({
       }
 
       setError(null)
+      cyberAudio.playSonarPing()
       onSubmit(trimmed)
     },
     [email, onSubmit, validate]
@@ -68,7 +76,6 @@ export function EmailCheckForm({
       const value = e.target.value
       setEmail(value)
 
-      // Clear error as user types if previously touched
       if (touched && error) {
         const newError = validate(value)
         setError(newError)
@@ -83,6 +90,13 @@ export function EmailCheckForm({
       setError(validate(email))
     }
   }, [email, validate])
+
+  const handleDemoClick = (demoEmail: string) => {
+    setEmail(demoEmail)
+    setError(null)
+    cyberAudio.playClick()
+    onSubmit(demoEmail)
+  }
 
   const hasError = touched && !!error
   const inputId = "email-check-input"
@@ -118,7 +132,7 @@ export function EmailCheckForm({
               aria-describedby={hasError ? errorId : undefined}
               className={cn(
                 "h-12 w-full rounded-lg border bg-card pl-4 pr-9 text-[15px] text-foreground",
-                "placeholder:text-muted-foreground/60",
+                "placeholder:text-muted-foreground/60 font-mono",
                 "outline-none transition-colors duration-150",
                 "focus:border-primary focus:ring-2 focus:ring-primary/25",
                 "disabled:opacity-50 disabled:cursor-not-allowed",
@@ -144,16 +158,16 @@ export function EmailCheckForm({
             className={cn(
               "h-12 shrink-0 rounded-lg px-6 text-[15px] font-medium",
               "sm:rounded-l-none",
-              "bg-primary text-primary-foreground",
+              "bg-primary text-primary-foreground font-semibold",
               "hover:bg-primary/85",
-              "transition-colors duration-150"
+              "transition-colors duration-150 shadow-md shadow-primary/20"
             )}
           >
-            {isSubmitting ? "Checking…" : "Check exposure"}
+            {isSubmitting ? "Scanning…" : "Check Exposure"}
           </Button>
         </div>
 
-        {/* Inline error — accessible, connected to input */}
+        {/* Inline error */}
         {hasError && (
           <p
             id={errorId}
@@ -162,6 +176,28 @@ export function EmailCheckForm({
           >
             {error}
           </p>
+        )}
+
+        {/* 1-Click Quick Demo Inboxes */}
+        {showDemoChips && !isSubmitting && (
+          <div className="flex flex-wrap items-center gap-1.5 pt-2 text-xs">
+            <span className="text-muted-foreground flex items-center gap-1 text-[11px] font-mono">
+              <Sparkles className="h-3 w-3 text-primary" /> Try Demo:
+            </span>
+            {DEMO_EMAILS.map((item) => (
+              <button
+                key={item.email}
+                type="button"
+                onClick={() => handleDemoClick(item.email)}
+                className="flex items-center gap-1.5 px-2 py-0.5 rounded-md border border-border/60 bg-secondary/40 text-muted-foreground hover:text-foreground hover:border-primary/40 hover:bg-secondary transition-all font-mono text-[11px]"
+              >
+                <span>{item.email}</span>
+                <span className="text-[9px] px-1 rounded bg-background/60 text-primary font-semibold">
+                  {item.label}
+                </span>
+              </button>
+            ))}
+          </div>
         )}
       </div>
     </form>
