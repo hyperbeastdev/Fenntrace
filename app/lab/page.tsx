@@ -2,11 +2,20 @@
  * Fenntrace — Design & Feature Preview Lab
  *
  * Localhost preview lab demonstrating proposed enhancements:
- * 1. 1-Click "Demo Try" Inboxes
- * 2. Global Intelligence Stats Ribbon
- * 3. High-Entropy Password Generator & Complexity Lab
- * 4. Company Domain Exposure Lookup (Enterprise Prototype)
- * 5. Interactive Security Architecture FAQ Accordion
+ *
+ * [A] ADVANCED ANIMATIONS & MICRO-INTERACTIONS:
+ * 1. 3D Holographic Parallax Tilt Cards (Dynamic Glare & Physics)
+ * 2. Web Audio API Cyber Soundboard (Synthesized Audio Feedback)
+ * 3. Matrix Digital Hex Rain Canvas Stream
+ * 4. Global Telemetry Mesh & Threat Arcs Visualizer
+ * 5. Magnetic Physics CTA Buttons
+ *
+ * [B] FUNCTIONAL UX & SECURITY FEATURES:
+ * 6. Global Intelligence Stats Ribbon
+ * 7. 1-Click "Demo Try" Inboxes
+ * 8. High-Entropy Password Generator & Complexity Lab
+ * 9. Company Domain Exposure Lookup (Enterprise Prototype)
+ * 10. Interactive Security Architecture FAQ Accordion
  *
  * Accessible locally at: http://localhost:3000/lab
  */
@@ -28,15 +37,34 @@ import {
   Shield,
   Layers,
   Search,
+  Volume2,
+  VolumeX,
+  Radio,
+  Zap,
+  Activity,
+  Cpu,
+  ShieldCheck,
+  Waves,
+  Fingerprint,
+  Lock,
+  Terminal,
+  MousePointerClick,
 } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { SpotlightCard } from "@/components/ui/spotlight-card"
 import { DecryptText } from "@/components/ui/decrypt-text"
+import { TiltCard } from "@/components/ui/tilt-card"
+import { MatrixRain } from "@/components/ui/matrix-rain"
+import { CyberNodes } from "@/components/ui/cyber-nodes"
+import { MagneticButton } from "@/components/ui/magnetic-button"
+import { cyberAudio } from "@/components/ui/cyber-audio"
 import { cn } from "@/lib/utils"
 
 export default function FeaturePreviewLabPage() {
+  const [activeTab, setActiveTab] = useState<"animations" | "features">("animations")
+
   return (
     <div className="flex min-h-svh flex-col bg-background text-foreground">
       <Header />
@@ -44,7 +72,7 @@ export default function FeaturePreviewLabPage() {
       <main className="flex-1">
         <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
           {/* Lab Header */}
-          <div className="flex flex-col gap-4 mb-12 border-b border-border/40 pb-8">
+          <div className="flex flex-col gap-4 mb-8 border-b border-border/40 pb-8">
             <Link
               href="/"
               className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors w-fit"
@@ -60,65 +88,163 @@ export default function FeaturePreviewLabPage() {
               </span>
             </div>
 
-            <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-              Feature & UI Enhancement Lab
-            </h1>
-            <p className="max-w-2xl text-sm text-muted-foreground leading-relaxed">
-              Explore interactive prototypes of the proposed features below. All components are live and testable on localhost.
-            </p>
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+              <div>
+                <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+                  Experimental Design & Animation Lab
+                </h1>
+                <p className="max-w-2xl text-sm text-muted-foreground leading-relaxed mt-1">
+                  Interactive prototypes of suggested cutting-edge animations, sound effects, and UI components running in isolation on localhost.
+                </p>
+              </div>
+
+              {/* View Switcher Tabs */}
+              <div className="flex items-center p-1 rounded-xl bg-card border border-border/80 self-start sm:self-auto shrink-0">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveTab("animations")
+                    cyberAudio.playClick()
+                  }}
+                  className={cn(
+                    "flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-medium font-mono transition-all",
+                    activeTab === "animations"
+                      ? "bg-primary text-primary-foreground font-semibold shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  <Zap className="h-3.5 w-3.5" />
+                  <span>FX & Animations</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveTab("features")
+                    cyberAudio.playClick()
+                  }}
+                  className={cn(
+                    "flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-medium font-mono transition-all",
+                    activeTab === "features"
+                      ? "bg-primary text-primary-foreground font-semibold shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  <Layers className="h-3.5 w-3.5" />
+                  <span>Feature Prototypes</span>
+                </button>
+              </div>
+            </div>
           </div>
 
-          <div className="flex flex-col gap-16">
-            {/* 1. STATS RIBBON */}
-            <section className="flex flex-col gap-4">
-              <SectionHeader
-                badge="01 · Trust Authority"
-                title="Global Intelligence Stats Ribbon"
-                description="Hero ribbon displaying live telemetry and cryptographic privacy metrics."
-              />
-              <StatsRibbonPreview />
-            </section>
+          {/* TAB 1: ANIMATIONS & MICRO-INTERACTIONS */}
+          {activeTab === "animations" && (
+            <div className="flex flex-col gap-16 animate-in fade-in duration-300">
+              {/* 1. 3D Holographic Tilt Card */}
+              <section className="flex flex-col gap-4">
+                <SectionHeader
+                  badge="FX · 01"
+                  title="3D Holographic Parallax Tilt Card"
+                  description="Mouse-tracking 3D perspective with dynamic specular holographic glare overlay. Move your cursor over the card."
+                />
+                <TiltCardPreview />
+              </section>
 
-            {/* 2. DEMO PILLS */}
-            <section className="flex flex-col gap-4">
-              <SectionHeader
-                badge="02 · Frictionless UX"
-                title="1-Click 'Demo Try' Inboxes"
-                description="Allows instant testing without forcing users to type custom email addresses."
-              />
-              <DemoPillsPreview />
-            </section>
+              {/* 2. Cyber Soundboard Synthesizer */}
+              <section className="flex flex-col gap-4">
+                <SectionHeader
+                  badge="FX · 02"
+                  title="Web Audio API Cyber Sound Synthesizer"
+                  description="Zero-asset, ultra-lightweight micro-sound design synthesized in real-time in the browser for tactile user feedback."
+                />
+                <SoundboardPreview />
+              </section>
 
-            {/* 3. PASSWORD GENERATOR */}
-            <section className="flex flex-col gap-4">
-              <SectionHeader
-                badge="03 · Proactive Security"
-                title="High-Entropy Password Generator & Lab"
-                description="Generates cryptographically random passwords with immediate k-Anonymity verification."
-              />
-              <PasswordGeneratorPreview />
-            </section>
+              {/* 3. Global Mesh Threat Arcs */}
+              <section className="flex flex-col gap-4">
+                <SectionHeader
+                  badge="FX · 03"
+                  title="Interactive Global Telemetry & Threat Arcs"
+                  description="Live SVG vector arcs and pulsing nodes mapping synthetic dark web intelligence packets."
+                />
+                <CyberNodes />
+              </section>
 
-            {/* 4. DOMAIN LOOKUP */}
-            <section className="flex flex-col gap-4">
-              <SectionHeader
-                badge="04 · Enterprise Tool"
-                title="Company Domain Exposure Lookup"
-                description="Aggregates breach incidents affecting corporate domains without exposing individual mailboxes."
-              />
-              <DomainLookupPreview />
-            </section>
+              {/* 4. Matrix Digital Hex Rain */}
+              <section className="flex flex-col gap-4">
+                <SectionHeader
+                  badge="FX · 04"
+                  title="Matrix Digital Hex Stream Canvas"
+                  description="High-performance HTML5 Canvas matrix rain cascade with luminous head glyphs."
+                />
+                <MatrixStreamPreview />
+              </section>
 
-            {/* 5. FAQ ACCORDION */}
-            <section className="flex flex-col gap-4">
-              <SectionHeader
-                badge="05 · Architecture Transparency"
-                title="Interactive Security Architecture FAQ"
-                description="Comprehensive expandable accordion addressing zero-data retention and k-anonymity math."
-              />
-              <FaqAccordionPreview />
-            </section>
-          </div>
+              {/* 5. Magnetic Physics CTA */}
+              <section className="flex flex-col gap-4">
+                <SectionHeader
+                  badge="FX · 05"
+                  title="Magnetic Physics Buttons"
+                  description="Buttons with spring dampening physics that pull towards the cursor when hovered."
+                />
+                <MagneticButtonPreview />
+              </section>
+            </div>
+          )}
+
+          {/* TAB 2: FUNCTIONAL UI & FEATURE PROTOTYPES */}
+          {activeTab === "features" && (
+            <div className="flex flex-col gap-16 animate-in fade-in duration-300">
+              {/* 1. STATS RIBBON */}
+              <section className="flex flex-col gap-4">
+                <SectionHeader
+                  badge="FEATURE · 01"
+                  title="Global Intelligence Stats Ribbon"
+                  description="Hero ribbon displaying live telemetry and cryptographic privacy metrics."
+                />
+                <StatsRibbonPreview />
+              </section>
+
+              {/* 2. DEMO PILLS */}
+              <section className="flex flex-col gap-4">
+                <SectionHeader
+                  badge="FEATURE · 02"
+                  title="1-Click 'Demo Try' Inboxes"
+                  description="Allows instant testing without forcing users to type custom email addresses."
+                />
+                <DemoPillsPreview />
+              </section>
+
+              {/* 3. PASSWORD GENERATOR */}
+              <section className="flex flex-col gap-4">
+                <SectionHeader
+                  badge="FEATURE · 03"
+                  title="High-Entropy Password Generator & Lab"
+                  description="Generates cryptographically random passwords with immediate k-Anonymity verification."
+                />
+                <PasswordGeneratorPreview />
+              </section>
+
+              {/* 4. DOMAIN LOOKUP */}
+              <section className="flex flex-col gap-4">
+                <SectionHeader
+                  badge="FEATURE · 04"
+                  title="Company Domain Exposure Lookup"
+                  description="Aggregates breach incidents affecting corporate domains without exposing individual mailboxes."
+                />
+                <DomainLookupPreview />
+              </section>
+
+              {/* 5. FAQ ACCORDION */}
+              <section className="flex flex-col gap-4">
+                <SectionHeader
+                  badge="FEATURE · 05"
+                  title="Interactive Security Architecture FAQ"
+                  description="Comprehensive expandable accordion addressing zero-data retention and k-anonymity math."
+                />
+                <FaqAccordionPreview />
+              </section>
+            </div>
+          )}
         </div>
       </main>
 
@@ -148,7 +274,263 @@ function SectionHeader({
 }
 
 // ---------------------------------------------------------------------------
-// 1. Stats Ribbon Component
+// FX 1. 3D Holographic Tilt Card Preview
+// ---------------------------------------------------------------------------
+function TiltCardPreview() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <TiltCard className="p-6 border-border/80 bg-gradient-to-br from-card via-card/90 to-card/60">
+        <div className="flex items-center justify-between border-b border-border/60 pb-4 mb-5">
+          <div className="flex items-center gap-2">
+            <div className="h-3 w-3 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-xs font-mono font-semibold text-foreground tracking-wider">
+              FENNTRACE SENTINEL PASS
+            </span>
+          </div>
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
+            CLASS 1 ENCRYPTION
+          </span>
+        </div>
+
+        <div className="flex items-center gap-4 my-4">
+          <div className="h-16 w-16 rounded-2xl bg-secondary/80 border border-border flex items-center justify-center text-primary shadow-inner">
+            <Fingerprint className="h-9 w-9 text-primary animate-pulse" />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-xs text-muted-foreground font-mono">AUTHORIZED OPERATOR</span>
+            <span className="text-base font-semibold text-foreground">Zero-Trust Terminal</span>
+            <span className="text-xs font-mono text-emerald-400 mt-1">● ID: FENN-9942-X7</span>
+          </div>
+        </div>
+
+        <div className="mt-6 pt-4 border-t border-border/60 flex items-center justify-between text-xs font-mono text-muted-foreground">
+          <span>SHA-256 k-ANON</span>
+          <span className="text-foreground font-bold">100% EPHEMERAL</span>
+        </div>
+      </TiltCard>
+
+      <TiltCard className="p-6 border-border/80 bg-gradient-to-br from-card via-card/90 to-card/60">
+        <div className="flex items-center justify-between border-b border-border/60 pb-4 mb-5">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="h-4 w-4 text-primary" />
+            <span className="text-xs font-mono font-semibold text-foreground tracking-wider">
+              ZERO-KNOWLEDGE VAULT
+            </span>
+          </div>
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            ACTIVE
+          </span>
+        </div>
+
+        <div className="space-y-3 font-mono text-xs">
+          <div className="flex justify-between p-2.5 rounded-lg bg-background/60 border border-border/50">
+            <span className="text-muted-foreground">k-Anon Truncation</span>
+            <span className="text-primary font-bold">5-Hex Prefix</span>
+          </div>
+          <div className="flex justify-between p-2.5 rounded-lg bg-background/60 border border-border/50">
+            <span className="text-muted-foreground">Query Persistence</span>
+            <span className="text-emerald-400 font-bold">0ms / In-Memory</span>
+          </div>
+          <div className="flex justify-between p-2.5 rounded-lg bg-background/60 border border-border/50">
+            <span className="text-muted-foreground">Global Registry</span>
+            <span className="text-foreground font-bold">14.8B+ Records</span>
+          </div>
+        </div>
+      </TiltCard>
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// FX 2. Soundboard Preview (Web Audio API)
+// ---------------------------------------------------------------------------
+function SoundboardPreview() {
+  const [soundEnabled, setSoundEnabled] = useState(true)
+
+  const toggleSound = () => {
+    const newState = !soundEnabled
+    setSoundEnabled(newState)
+    cyberAudio.enabled = newState
+    if (newState) {
+      cyberAudio.playClick()
+    }
+  }
+
+  return (
+    <SpotlightCard className="p-6 flex flex-col gap-5 bg-card/80 border border-border/80">
+      <div className="flex items-center justify-between border-b border-border/60 pb-4">
+        <div className="flex items-center gap-2">
+          <Waves className="h-4 w-4 text-primary" />
+          <span className="text-xs font-mono font-semibold text-foreground">
+            TACTICAL AUDIO SYNTHESIZER (WEB AUDIO API)
+          </span>
+        </div>
+
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={toggleSound}
+          className={cn(
+            "h-8 px-3 text-xs gap-1.5 font-mono",
+            soundEnabled ? "border-primary/50 text-primary" : "border-border text-muted-foreground"
+          )}
+        >
+          {soundEnabled ? <Volume2 className="h-3.5 w-3.5" /> : <VolumeX className="h-3.5 w-3.5" />}
+          <span>{soundEnabled ? "Audio Enabled" : "Muted"}</span>
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <button
+          type="button"
+          onClick={() => cyberAudio.playClick(900)}
+          className="flex flex-col items-center justify-center p-4 rounded-xl border border-border/80 bg-secondary/40 hover:bg-primary/10 hover:border-primary/50 transition-all text-center group"
+        >
+          <MousePointerClick className="h-5 w-5 text-primary mb-2 group-hover:scale-110 transition-transform" />
+          <span className="text-xs font-mono font-semibold text-foreground">UI Click</span>
+          <span className="text-[10px] text-muted-foreground font-mono mt-0.5">800Hz Pitch Drop</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => cyberAudio.playSonarPing()}
+          className="flex flex-col items-center justify-center p-4 rounded-xl border border-border/80 bg-secondary/40 hover:bg-primary/10 hover:border-primary/50 transition-all text-center group"
+        >
+          <Radio className="h-5 w-5 text-sky-400 mb-2 group-hover:scale-110 transition-transform animate-pulse" />
+          <span className="text-xs font-mono font-semibold text-foreground">Sonar Sweep</span>
+          <span className="text-[10px] text-muted-foreground font-mono mt-0.5">1200Hz Resonance</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => cyberAudio.playSuccessChime()}
+          className="flex flex-col items-center justify-center p-4 rounded-xl border border-border/80 bg-secondary/40 hover:bg-emerald-500/10 hover:border-emerald-500/50 transition-all text-center group"
+        >
+          <ShieldCheck className="h-5 w-5 text-emerald-400 mb-2 group-hover:scale-110 transition-transform" />
+          <span className="text-xs font-mono font-semibold text-foreground">Clean / Success</span>
+          <span className="text-[10px] text-muted-foreground font-mono mt-0.5">4-Chord Harmonic</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => cyberAudio.playAlert()}
+          className="flex flex-col items-center justify-center p-4 rounded-xl border border-border/80 bg-secondary/40 hover:bg-rose-500/10 hover:border-rose-500/50 transition-all text-center group"
+        >
+          <Zap className="h-5 w-5 text-rose-400 mb-2 group-hover:scale-110 transition-transform" />
+          <span className="text-xs font-mono font-semibold text-foreground">Threat Alert</span>
+          <span className="text-[10px] text-muted-foreground font-mono mt-0.5">Sawtooth Ramp</span>
+        </button>
+      </div>
+
+      <p className="text-[11px] font-mono text-muted-foreground">
+        Synthesizes audio through mathematical oscillators in 0.04s without requiring MP3 network requests.
+      </p>
+    </SpotlightCard>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// FX 4. Matrix Rain Stream Preview
+// ---------------------------------------------------------------------------
+function MatrixStreamPreview() {
+  const [speed, setSpeed] = useState(1)
+  const [colorScheme, setColorScheme] = useState<"emerald" | "cyan">("emerald")
+
+  return (
+    <div className="relative h-64 sm:h-72 w-full rounded-2xl border border-border/80 overflow-hidden bg-[#070a13]">
+      <MatrixRain
+        speed={speed}
+        color={colorScheme === "emerald" ? "#3fb950" : "#38bdf8"}
+        headColor={colorScheme === "emerald" ? "#7ee787" : "#a5f3fc"}
+        opacity={0.8}
+      />
+
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent pointer-events-none" />
+
+      {/* Floating Control Overlay */}
+      <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-card/80 border border-border/80 backdrop-blur-md">
+        <div className="flex items-center gap-2">
+          <Terminal className="h-4 w-4 text-emerald-400" />
+          <span className="text-xs font-mono font-semibold text-foreground">CANVAS_HEX_CASCADE</span>
+        </div>
+
+        <div className="flex items-center gap-3 text-xs font-mono">
+          <div className="flex items-center gap-1.5">
+            <span className="text-muted-foreground">Speed:</span>
+            <button
+              onClick={() => {
+                setSpeed((s) => (s === 1 ? 2 : 1))
+                cyberAudio.playClick()
+              }}
+              className="px-2 py-0.5 rounded bg-secondary text-foreground hover:bg-primary/20 border border-border"
+            >
+              {speed}x
+            </button>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            <span className="text-muted-foreground">Palette:</span>
+            <button
+              onClick={() => {
+                setColorScheme((c) => (c === "emerald" ? "cyan" : "emerald"))
+                cyberAudio.playClick()
+              }}
+              className="px-2 py-0.5 rounded bg-secondary text-foreground hover:bg-primary/20 border border-border capitalize"
+            >
+              {colorScheme}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// FX 5. Magnetic Physics Buttons Preview
+// ---------------------------------------------------------------------------
+function MagneticButtonPreview() {
+  return (
+    <SpotlightCard className="p-8 flex flex-col items-center justify-center gap-6 bg-card/80 border border-border/80 text-center">
+      <div className="flex flex-col gap-1 max-w-md">
+        <h4 className="text-sm font-semibold text-foreground">Interactive Magnetic Surface</h4>
+        <p className="text-xs text-muted-foreground">
+          Hover near the buttons below. The elements fluidly magnetically pull towards the pointer with smooth spring dampening physics.
+        </p>
+      </div>
+
+      <div className="flex flex-wrap items-center justify-center gap-4">
+        <MagneticButton
+          onClick={() => cyberAudio.playClick(900)}
+          className="bg-primary text-primary-foreground font-semibold text-xs shadow-lg shadow-primary/20 hover:shadow-primary/40 border border-primary/40"
+        >
+          <Zap className="h-3.5 w-3.5 mr-2" />
+          <span>Magnetic Primary Action</span>
+        </MagneticButton>
+
+        <MagneticButton
+          onClick={() => cyberAudio.playSonarPing()}
+          className="bg-secondary text-foreground font-semibold text-xs border border-border hover:border-primary/50"
+        >
+          <Radio className="h-3.5 w-3.5 mr-2 text-primary" />
+          <span>Magnetic Radar Sweep</span>
+        </MagneticButton>
+
+        <MagneticButton
+          onClick={() => cyberAudio.playSuccessChime()}
+          className="bg-emerald-500/10 text-emerald-400 font-semibold text-xs border border-emerald-500/30 hover:bg-emerald-500/20"
+        >
+          <ShieldCheck className="h-3.5 w-3.5 mr-2" />
+          <span>Verify Integrity</span>
+        </MagneticButton>
+      </div>
+    </SpotlightCard>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// FEATURE 1. Stats Ribbon Component
 // ---------------------------------------------------------------------------
 function StatsRibbonPreview() {
   const stats = [
@@ -177,7 +559,7 @@ function StatsRibbonPreview() {
 }
 
 // ---------------------------------------------------------------------------
-// 2. 1-Click Demo Inboxes
+// FEATURE 2. 1-Click Demo Inboxes
 // ---------------------------------------------------------------------------
 function DemoPillsPreview() {
   const [selectedEmail, setSelectedEmail] = useState("alex@example.com")
@@ -192,6 +574,7 @@ function DemoPillsPreview() {
   const handleSelect = (email: string) => {
     setSelectedEmail(email)
     navigator.clipboard.writeText(email)
+    cyberAudio.playClick()
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
@@ -248,7 +631,7 @@ function DemoPillsPreview() {
 }
 
 // ---------------------------------------------------------------------------
-// 3. Password Generator & Lab
+// FEATURE 3. Password Generator & Lab
 // ---------------------------------------------------------------------------
 function PasswordGeneratorPreview() {
   const [length, setLength] = useState(20)
@@ -281,6 +664,7 @@ function PasswordGeneratorPreview() {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(generatedPassword)
+    cyberAudio.playSuccessChime()
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
@@ -309,7 +693,10 @@ function PasswordGeneratorPreview() {
           <Button
             type="button"
             variant="outline"
-            onClick={generate}
+            onClick={() => {
+              generate()
+              cyberAudio.playClick()
+            }}
             className="h-12 px-3.5 border-border"
             title="Regenerate password"
           >
@@ -366,7 +753,7 @@ function PasswordGeneratorPreview() {
 }
 
 // ---------------------------------------------------------------------------
-// 4. Domain Lookup Component
+// FEATURE 4. Domain Lookup Component
 // ---------------------------------------------------------------------------
 function DomainLookupPreview() {
   const [domain, setDomain] = useState("adobe.com")
@@ -376,6 +763,7 @@ function DomainLookupPreview() {
   const handleQuery = (e: React.FormEvent) => {
     e.preventDefault()
     if (!domain) return
+    cyberAudio.playSonarPing()
     startTransition(() => {
       setQueried(true)
     })
@@ -441,7 +829,7 @@ function DomainLookupPreview() {
 }
 
 // ---------------------------------------------------------------------------
-// 5. FAQ Accordion
+// FEATURE 5. FAQ Accordion
 // ---------------------------------------------------------------------------
 function FaqAccordionPreview() {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
@@ -476,7 +864,10 @@ function FaqAccordionPreview() {
           >
             <button
               type="button"
-              onClick={() => setOpenIndex(isOpen ? null : index)}
+              onClick={() => {
+                setOpenIndex(isOpen ? null : index)
+                cyberAudio.playClick()
+              }}
               className="w-full flex items-center justify-between p-4 text-left text-sm font-medium text-foreground hover:text-primary transition-colors select-none"
             >
               <span className="flex items-center gap-2.5">
